@@ -19,7 +19,9 @@ export const env = createEnv({
 		),
 		// Add `.min(1) on ID and SECRET if you want to make sure they're not empty
 		TWITCH_CLIENT_ID: z.string().min(1),
-		TWITCH_CLIENT_SECRET: z.string().min(1)
+		TWITCH_CLIENT_SECRET: z.string().min(1),
+		UPLOADTHING_APP_ID: z.string().min(1),
+		UPLOADTHING_SECRET: z.string().min(1)
 	},
 
 	/**
@@ -41,7 +43,9 @@ export const env = createEnv({
 		NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
 		NEXTAUTH_URL: process.env.NEXTAUTH_URL,
 		TWITCH_CLIENT_ID: process.env.TWITCH_CLIENT_ID,
-		TWITCH_CLIENT_SECRET: process.env.TWITCH_CLIENT_SECRET
+		TWITCH_CLIENT_SECRET: process.env.TWITCH_CLIENT_SECRET,
+		UPLOADTHING_APP_ID: process.env.UPLOADTHING_APP_ID,
+		UPLOADTHING_SECRET: process.env.UPLOADTHING_SECRET
 	},
 	skipValidation: process.env.SKIP_ENV_VALIDATION === "true"
 })

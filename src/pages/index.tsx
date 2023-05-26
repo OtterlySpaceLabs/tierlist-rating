@@ -4,6 +4,7 @@ import Link from "next/link"
 import { signIn, signOut, useSession } from "next-auth/react"
 
 import { api } from "~/utils/api"
+import GameSearch from "../components/submission/gameSearch"
 
 const Home: NextPage = () => {
 	const hello = api.example.hello.useQuery({ text: "from tRPC" })
@@ -48,6 +49,10 @@ const Home: NextPage = () => {
 							{hello.data ? hello.data.greeting : "Loading tRPC query..."}
 						</p>
 						<AuthShowcase />
+
+						<div className="flex flex-col items-center gap-2">
+							<GameSearch />
+						</div>
 					</div>
 				</div>
 			</main>
