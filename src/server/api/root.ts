@@ -1,5 +1,4 @@
 import { createTRPCRouter } from "~/server/api/trpc"
-import { exampleRouter } from "~/server/api/routers/example"
 import { igdbRouter } from "./routers/igdb"
 import { submissionRouter } from "./routers/submission/submission"
 
@@ -9,7 +8,6 @@ import { submissionRouter } from "./routers/submission/submission"
  * All routers added in /api/routers should be manually added here.
  */
 export const appRouter = createTRPCRouter({
-	example: exampleRouter,
 	igdb: igdbRouter,
 	submission: submissionRouter
 })
