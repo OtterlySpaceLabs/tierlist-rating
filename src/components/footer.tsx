@@ -48,6 +48,7 @@ export default function Footer() {
 						Made with ❤️ and 🦦 by{" "}
 						<Link
 							href="https://otterly.space"
+							target="_blank"
 							className="ml-1 inline-flex items-center align-middle underline"
 						>
 							<Image src="/logo-otterly.png" alt="Otterly Space" width={32} height={32} />
