@@ -10,5 +10,15 @@ export const submissionRouter = createTRPCRouter({
 			}
 		})
 		return submission
+	}),
+	listAll: protectedProcedure.query(({ ctx }) => {
+		if (!ctx.session.user.isModerator) {
+			throw new Error("You are not authorized to view all submissions.")
+		}
+		return ctx.prisma.submission.findMany({
+			include: {
+				author: true
+			}
+		})
 	})
 })
