@@ -12,6 +12,7 @@ import { api } from "../../utils/api"
 import { useState } from "react"
 import { Alert, AlertDescription, AlertTitle } from "../ui/alert"
 import { CheckCheckIcon } from "lucide-react"
+import Link from "next/link"
 
 export default function SubmissionForm() {
 	const [submissionComplete, setSubmissionComplete] = useState(false)
@@ -61,6 +62,41 @@ export default function SubmissionForm() {
 					}}
 					className="space-y-8"
 				>
+					<div className="pb-8">
+						<h2 className="pb-4 text-2xl font-bold">Rules to submit a character</h2>
+						<ul className="list-inside list-disc pb-4">
+							<li>
+								Character must be fictional and appear in a video game (anime characters are tolerated)
+							</li>
+							<li>He needs to be male or identify as a male/non-binary</li>
+							<li>He needs to be 18+</li>
+							<li>Try to use official artwork or in-game captures</li>
+							<li>
+								Avoid fanarts, especially if its artist is unknown or if they don&apos;t allow repost
+							</li>
+							<li>
+								Images needs to follow Twitch{" "}
+								<Link
+									href="https://www.twitch.tv/p/en/legal/terms-of-service/"
+									className="text-orange-400 underline"
+								>
+									Terms of Service
+								</Link>{" "}
+								and{" "}
+								<Link
+									href="https://safety.twitch.tv/s/article/Community-Guidelines"
+									className="text-orange-400 underline"
+								>
+									Community Guidelines
+								</Link>
+							</li>
+						</ul>
+						<p>
+							Moderators can reject your submission based on their judgment following these rules and will
+							use principle of caution in case of doubt.
+						</p>
+					</div>
+
 					<FormField
 						control={form.control}
 						name="image"

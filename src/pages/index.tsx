@@ -29,9 +29,9 @@ const Home: NextPage = () => {
 						height={200}
 						className="mb-4 rounded-full"
 					/>
-					<h1 className="text-center text-4xl font-bold">Get your crush game character in!</h1>
+					<h1 className="text-center text-4xl font-bold">Get your game character crush in!</h1>
 					<p className="mt-4 text-center text-xl">
-						Submit your character and have your streamer react to it!
+						Submit your favorites male game characters and have your streamer rank them!
 					</p>
 					<button
 						className="mt-8 inline-flex items-center rounded-md bg-purple-700 px-4 py-2 text-lg font-semibold text-white hover:bg-purple-600"
