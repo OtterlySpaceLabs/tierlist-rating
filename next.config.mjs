@@ -9,7 +9,16 @@ const config = {
 	reactStrictMode: true,
 
 	experimental: {
-		esmExternals: false
+		esmExternals: false,
+
+		swcPlugins: [
+			[
+				"next-superjson-plugin",
+				{
+					excluded: []
+				}
+			]
+		]
 	},
 
 	/**

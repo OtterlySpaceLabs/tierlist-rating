@@ -8,6 +8,7 @@ export const ourFileRouter = {
 	// Define as many FileRoutes as you like, each with a unique routeSlug
 	imageUploader: f
 		// Set permissions and file types for this FileRoute
+		// FIXME: restrict to jpg/png
 		.fileTypes(["image"])
 		.maxSize("1MB")
 		.middleware(async (req, res) => {

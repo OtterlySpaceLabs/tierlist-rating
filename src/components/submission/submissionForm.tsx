@@ -66,8 +66,8 @@ export default function SubmissionForm() {
 						name="image"
 						render={({ field }) => (
 							<div className="grid grid-cols-1 gap-4 space-y-2 sm:grid-cols-3">
-								<FormLabel className="sm:col-span-3">Character picture</FormLabel>
-								<div className="flex items-center justify-center">
+								<FormLabel className="col-span-1 sm:col-span-3">Character picture</FormLabel>
+								<div className="col-span-1 flex items-center justify-center">
 									<UploadButton<OurFileRouter>
 										endpoint="imageUploader"
 										onClientUploadComplete={(res) => {
@@ -103,7 +103,7 @@ export default function SubmissionForm() {
 										<div className="relative h-64 w-64 rounded-lg border-4 border-dashed border-gray-300 dark:border-gray-600 sm:h-80 sm:w-80"></div>
 									)}
 								</div>
-								<div className="col-span-3">
+								<div className="sm:col-span-3">
 									<FormMessage />
 								</div>
 							</div>

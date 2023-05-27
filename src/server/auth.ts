@@ -15,6 +15,8 @@ declare module "next-auth" {
 	interface Session extends DefaultSession {
 		user: {
 			id: string
+			isModerator: boolean
+			isStreamer: boolean
 			// ...other properties
 			// role: UserRole;
 		} & DefaultSession["user"]
@@ -37,7 +39,9 @@ export const authOptions: NextAuthOptions = {
 			...session,
 			user: {
 				...session.user,
-				id: token.sub
+				id: token.sub,
+				isModerator: env.ALLOWED_MODERATORS.includes(session.user.name ? session.user.name.toLowerCase() : ""),
+				isStreamer: env.ALLOWED_STREAMERS.includes(session.user.name ? session.user.name.toLowerCase() : "")
 			}
 		})
 	},

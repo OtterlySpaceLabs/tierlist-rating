@@ -20,7 +20,7 @@ const Home: NextPage = () => {
 			<CustomHead />
 			<div className="flex h-screen flex-col">
 				<Header />
-				<main className="flex h-full flex-col items-center justify-center pb-24 align-middle">
+				<main className="flex h-full flex-col items-center justify-center px-2 pb-24 align-middle">
 					<Image
 						src="/logo.png"
 						alt="Smash App Logo"

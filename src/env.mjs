@@ -21,7 +21,15 @@ export const env = createEnv({
 		TWITCH_CLIENT_ID: z.string().min(1),
 		TWITCH_CLIENT_SECRET: z.string().min(1),
 		UPLOADTHING_APP_ID: z.string().min(1),
-		UPLOADTHING_SECRET: z.string().min(1)
+		UPLOADTHING_SECRET: z.string().min(1),
+		ALLOWED_MODERATORS: z
+			.string()
+			.transform((val) => val.split(","))
+			.pipe(z.array(z.string().refine((val) => val.length > 0))),
+		ALLOWED_STREAMERS: z
+			.string()
+			.transform((val) => val.split(","))
+			.pipe(z.array(z.string().refine((val) => val.length > 0)))
 	},
 
 	/**
@@ -52,7 +60,9 @@ export const env = createEnv({
 		TWITCH_CLIENT_SECRET: process.env.TWITCH_CLIENT_SECRET,
 		UPLOADTHING_APP_ID: process.env.UPLOADTHING_APP_ID,
 		UPLOADTHING_SECRET: process.env.UPLOADTHING_SECRET,
-		NEXT_PUBLIC_URL: process.env.NEXT_PUBLIC_URL
+		NEXT_PUBLIC_URL: process.env.NEXT_PUBLIC_URL,
+		ALLOWED_MODERATORS: process.env.ALLOWED_MODERATORS,
+		ALLOWED_STREAMERS: process.env.ALLOWED_STREAMERS
 	},
 	skipValidation: process.env.SKIP_ENV_VALIDATION === "true"
 })
