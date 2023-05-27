@@ -36,24 +36,24 @@ export default function SubmissionListPage() {
 	)
 
 	return (
-		<>
+		<div className="flex h-screen flex-col">
 			<CustomHead title="Submission list" />
 			<Header />
 			<TabsNavigation />
-			<main className="flex flex-col items-center p-8 pt-0">
+			<main className="mb-auto flex flex-col items-center p-8 pt-0">
 				<section className="mt-8 w-full max-w-6xl">
 					{submissions && submissions.length > 0 ? (
 						<ul>
 							{submissions.map((submission, index) => (
 								<li key={submission.id} className={cn("py-4", lineBorderStyle(index))}>
 									<div className="flex flex-col justify-center sm:flex-row sm:justify-normal">
-										<div className="h[200px] w[200px] flex justify-center object-contain align-middle">
+										<div className="relative flex h-52 w-52 justify-center object-contain align-middle">
 											<Image
 												unoptimized
 												src={submission.image}
 												alt={submission.name}
-												width={200}
-												height={200}
+												fill
+												className="rounded bg-sky-100/10 object-cover shadow"
 											/>
 										</div>
 
@@ -86,6 +86,6 @@ export default function SubmissionListPage() {
 				</section>
 			</main>
 			<Footer />
-		</>
+		</div>
 	)
 }
