@@ -33,11 +33,11 @@ declare module "next-auth" {
  */
 export const authOptions: NextAuthOptions = {
 	callbacks: {
-		session: ({ session, user }) => ({
+		session: ({ session, token }) => ({
 			...session,
 			user: {
 				...session.user,
-				id: user.id
+				id: token.sub
 			}
 		})
 	},
@@ -61,7 +61,10 @@ export const authOptions: NextAuthOptions = {
 		 *
 		 * @see https://next-auth.js.org/providers/github
 		 */
-	]
+	],
+	session: {
+		strategy: "jwt"
+	}
 }
 
 /**

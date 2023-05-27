@@ -100,7 +100,7 @@ export default function SubmissionForm() {
 											/>
 										</div>
 									) : (
-										<div className="relative h-64 w-64 rounded-sm border-4 border-dashed border-gray-300 dark:border-gray-600 sm:h-80 sm:w-80"></div>
+										<div className="relative h-64 w-64 rounded-lg border-4 border-dashed border-gray-300 dark:border-gray-600 sm:h-80 sm:w-80"></div>
 									)}
 								</div>
 								<div className="col-span-3">

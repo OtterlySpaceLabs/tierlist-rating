@@ -16,8 +16,8 @@ export default function ThemeToggle() {
 			checked={enabled}
 			onChange={switchTheme}
 			className={classNames(
-				enabled ? "bg-indigo-600" : "bg-gray-200",
-				"relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-offset-2"
+				enabled ? "bg-orange-600" : "bg-gray-200",
+				"relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-orange-600 focus:ring-offset-2"
 			)}
 		>
 			<span className="sr-only">Use setting</span>
@@ -43,7 +43,7 @@ export default function ThemeToggle() {
 					)}
 					aria-hidden="true"
 				>
-					<MoonIcon size={16} className="h-3 w-3 text-indigo-400" />
+					<MoonIcon size={16} className="h-3 w-3 text-orange-400" />
 				</span>
 			</span>
 		</Switch>

@@ -1,10 +1,20 @@
-import { type NextPage } from "next"
+import { type GetServerSideProps, type NextPage } from "next"
 import Head from "next/head"
-import Link from "next/link"
-import { signIn, signOut, useSession } from "next-auth/react"
-import GameSearch from "../components/submission/gameSearch"
+import { signIn, useSession } from "next-auth/react"
+import { useRouter } from "next/router"
+import { getServerSession } from "next-auth"
+import { authOptions } from "../server/auth"
+import Header from "../components/header"
+import Image from "next/image"
 
 const Home: NextPage = () => {
+	const { data: sessionData } = useSession()
+	const router = useRouter()
+
+	if (sessionData?.user) {
+		void router.push("/submit")
+	}
+
 	return (
 		<>
 			<Head>
@@ -14,63 +24,55 @@ const Home: NextPage = () => {
 				<link rel="icon" type="image/png" sizes="16x16" href="/favicons/favicon-16x16.png" />
 				<link rel="shortcut icon" href="/favicons/favicon.ico" />
 			</Head>
-			<main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c]">
-				<div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
-					<h1 className="text-5xl font-extrabold tracking-tight text-white sm:text-[5rem]">
-						Create <span className="text-[hsl(280,100%,70%)]">T3</span> App
-					</h1>
-					<div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-8">
-						<Link
-							className="flex max-w-xs flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20"
-							href="https://create.t3.gg/en/usage/first-steps"
-							target="_blank"
-						>
-							<h3 className="text-2xl font-bold">First Steps →</h3>
-							<div className="text-lg">
-								Just the basics - Everything you need to know to set up your database and
-								authentication.
-							</div>
-						</Link>
-						<Link
-							className="flex max-w-xs flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20"
-							href="https://create.t3.gg/en/introduction"
-							target="_blank"
-						>
-							<h3 className="text-2xl font-bold">Documentation →</h3>
-							<div className="text-lg">
-								Learn more about Create T3 App, the libraries it uses, and how to deploy it.
-							</div>
-						</Link>
-					</div>
-					<div className="flex flex-col items-center gap-2">
-						<AuthShowcase />
-
-						<div className="flex flex-col items-center gap-2">
-							<GameSearch />
-						</div>
-					</div>
-				</div>
-			</main>
+			<div className="flex h-screen flex-col">
+				<Header />
+				<main className="flex h-full flex-col items-center justify-center pb-24 align-middle">
+					<Image
+						src="/logo.png"
+						alt="Smash App Logo"
+						width={200}
+						height={200}
+						className="mb-4 rounded-full"
+					/>
+					<h1 className="text-center text-4xl font-bold">Get your crush game character in!</h1>
+					<p className="mt-4 text-center text-xl">
+						Submit your character and have your streamer react to it!
+					</p>
+					<button
+						className="mt-8 inline-flex items-center rounded-md bg-purple-700 px-4 py-2 text-lg font-semibold text-white hover:bg-purple-600"
+						onClick={() => void signIn("twitch")}
+					>
+						<Image
+							unoptimized
+							src="/twitch.svg"
+							className="-ml-1 mr-2 h-8 w-8 text-white"
+							alt="Twitch logo"
+							width={32}
+							height={32}
+						/>
+						<span className="pb-1">Sign in with Twitch</span>
+					</button>
+				</main>
+			</div>
 		</>
 	)
 }
 
-export default Home
+export const getServerSideProps: GetServerSideProps = async (context) => {
+	const session = await getServerSession(context.req, context.res, authOptions)
 
-const AuthShowcase: React.FC = () => {
-	const { data: sessionData } = useSession()
+	if (session?.user) {
+		return {
+			redirect: {
+				destination: "/submit",
+				permanent: false
+			}
+		}
+	}
 
-	return (
-		<div className="flex flex-col items-center justify-center gap-4">
-			<p className="text-center text-2xl text-white">
-				{sessionData && <span>Logged in as {sessionData.user?.name}</span>}
-			</p>
-			<button
-				className="rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20"
-				onClick={sessionData ? () => void signOut() : () => void signIn()}
-			>
-				{sessionData ? "Sign out" : "Sign in"}
-			</button>
-		</div>
-	)
+	return {
+		props: {}
+	}
 }
+
+export default Home
