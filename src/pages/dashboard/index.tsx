@@ -6,6 +6,7 @@ import TabsNavigation from "../../components/tabsNavigation"
 import { cn } from "../../lib/utils"
 import { useCallback } from "react"
 import { api } from "../../utils/api"
+import Footer from "../../components/footer"
 
 export default function SubmissionListPage() {
 	const { data: submissions } = api.submission.listAll.useQuery()
@@ -84,6 +85,7 @@ export default function SubmissionListPage() {
 					)}
 				</section>
 			</main>
+			<Footer />
 		</>
 	)
 }

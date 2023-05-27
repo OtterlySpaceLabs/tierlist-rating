@@ -9,6 +9,7 @@ import Image from "next/image"
 import TabsNavigation from "../../components/tabsNavigation"
 import { cn } from "../../lib/utils"
 import { useCallback } from "react"
+import Footer from "../../components/footer"
 
 interface SubmissionListPageProps {
 	submissions: Submission[]
@@ -82,6 +83,7 @@ export default function SubmissionListPage({ submissions }: SubmissionListPagePr
 					)}
 				</section>
 			</main>
+			<Footer />
 		</>
 	)
 }

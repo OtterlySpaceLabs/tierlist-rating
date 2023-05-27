@@ -2,6 +2,7 @@ import Header from "../../components/header"
 import SubmissionForm from "../../components/submission/submissionForm"
 import CustomHead from "../../components/customHead"
 import TabsNavigation from "../../components/tabsNavigation"
+import Footer from "../../components/footer"
 
 export default function SubmitPage() {
 	return (
@@ -14,6 +15,7 @@ export default function SubmitPage() {
 					<SubmissionForm />
 				</section>
 			</main>
+			<Footer />
 		</>
 	)
 }

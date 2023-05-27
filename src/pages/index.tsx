@@ -6,6 +6,7 @@ import { authOptions } from "../server/auth"
 import Header from "../components/header"
 import Image from "next/image"
 import CustomHead from "../components/customHead"
+import Footer from "../components/footer"
 
 const Home: NextPage = () => {
 	const { data: sessionData } = useSession()
@@ -47,6 +48,7 @@ const Home: NextPage = () => {
 						<span className="pb-1">Sign in with Twitch</span>
 					</button>
 				</main>
+				<Footer />
 			</div>
 		</>
 	)
