@@ -41,7 +41,7 @@ export default function Footer() {
 		}
 	]
 	return (
-		<footer className="absolute bottom-0 w-full">
+		<footer className="relative bottom-0 w-full">
 			<div className="mx-auto max-w-7xl px-6 py-6 md:flex md:items-center md:justify-between lg:px-8">
 				<div className="mb-4 flex justify-center md:order-1 md:mb-0">
 					<p className="inline-flex items-center text-center align-middle text-xs leading-5 text-gray-500 dark:text-gray-400">
