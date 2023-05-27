@@ -1,11 +1,11 @@
 import { type GetServerSideProps, type NextPage } from "next"
-import Head from "next/head"
 import { signIn, useSession } from "next-auth/react"
 import { useRouter } from "next/router"
 import { getServerSession } from "next-auth"
 import { authOptions } from "../server/auth"
 import Header from "../components/header"
 import Image from "next/image"
+import CustomHead from "../components/customHead"
 
 const Home: NextPage = () => {
 	const { data: sessionData } = useSession()
@@ -17,13 +17,7 @@ const Home: NextPage = () => {
 
 	return (
 		<>
-			<Head>
-				<title>Smash App</title>
-				<link rel="apple-touch-icon" sizes="180x180" href="/favicons/apple-touch-icon.png" />
-				<link rel="icon" type="image/png" sizes="32x32" href="/favicons/favicon-32x32.png" />
-				<link rel="icon" type="image/png" sizes="16x16" href="/favicons/favicon-16x16.png" />
-				<link rel="shortcut icon" href="/favicons/favicon.ico" />
-			</Head>
+			<CustomHead />
 			<div className="flex h-screen flex-col">
 				<Header />
 				<main className="flex h-full flex-col items-center justify-center pb-24 align-middle">

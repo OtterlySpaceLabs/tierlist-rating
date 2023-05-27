@@ -30,6 +30,12 @@ export const env = createEnv({
 	 * `NEXT_PUBLIC_`.
 	 */
 	client: {
+		NEXT_PUBLIC_URL: z.preprocess(
+			() =>
+				process.env.NEXT_PUBLIC_URL ||
+				(process.env.NEXT_PUBLIC_VERCEL_URL && `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`),
+			z.string().url()
+		)
 		// NEXT_PUBLIC_CLIENTVAR: z.string().min(1),
 	},
 
@@ -45,7 +51,8 @@ export const env = createEnv({
 		TWITCH_CLIENT_ID: process.env.TWITCH_CLIENT_ID,
 		TWITCH_CLIENT_SECRET: process.env.TWITCH_CLIENT_SECRET,
 		UPLOADTHING_APP_ID: process.env.UPLOADTHING_APP_ID,
-		UPLOADTHING_SECRET: process.env.UPLOADTHING_SECRET
+		UPLOADTHING_SECRET: process.env.UPLOADTHING_SECRET,
+		NEXT_PUBLIC_URL: process.env.NEXT_PUBLIC_URL
 	},
 	skipValidation: process.env.SKIP_ENV_VALIDATION === "true"
 })
