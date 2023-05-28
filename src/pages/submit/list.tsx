@@ -101,9 +101,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 	const submissions = await prisma.submission.findMany({
 		where: {
 			authorId: session.user.id
-		},
-		include: {
-			author: true
 		}
 	})
 

@@ -1,10 +1,11 @@
 import { type User, type Submission } from "@prisma/client"
 import Image from "next/image"
-import { useMemo } from "react"
+import { useMemo, useState } from "react"
 import { cn } from "../../lib/utils"
 import { CheckCircleIcon, PencilSquareIcon, TrashIcon, XCircleIcon } from "@heroicons/react/24/outline"
 import { api } from "../../utils/api"
 import Link from "next/link"
+import ImagePreviewDialog from "./imagePreviewDialog"
 
 interface ListItemProps {
 	submission: Submission
@@ -47,15 +48,19 @@ export default function ListItem({ submission, moderationMode, showDeleteDialog,
 		props.onStatusChange?.()
 	}
 
+	const [openPreview, setOpenPreview] = useState(false)
+
 	return (
 		<div className="flex flex-col justify-center sm:flex-row sm:justify-normal">
+			<ImagePreviewDialog submission={submission} open={openPreview} onClose={() => setOpenPreview(false)} />
 			<div className="relative mx-auto mb-4 flex h-52 w-52 justify-center align-middle sm:mx-0 sm:mb-0">
 				<Image
 					unoptimized
 					src={submission.image}
 					alt={submission.name}
 					fill
-					className="rounded-sm bg-sky-100/10 object-cover shadow"
+					className="cursor-pointer rounded-sm bg-sky-100/10 object-cover shadow"
+					onClick={() => setOpenPreview(true)}
 				/>
 			</div>
 
