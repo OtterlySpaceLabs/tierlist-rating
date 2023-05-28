@@ -13,6 +13,7 @@ import { useState } from "react"
 import { Alert, AlertDescription, AlertTitle } from "../ui/alert"
 import { CheckCheckIcon } from "lucide-react"
 import Link from "next/link"
+import useNameSearch from "./useNameSearch"
 
 export default function SubmissionForm() {
 	const [submissionComplete, setSubmissionComplete] = useState(false)
@@ -27,6 +28,8 @@ export default function SubmissionForm() {
 	})
 
 	const submissionCreationMutate = api.submission.create.useMutation()
+
+	const { searchResults, setSearchInput } = useNameSearch()
 
 	// 2. Define a submit handler.
 	function onSubmit(values: z.infer<typeof submissionCreationSchema>) {
@@ -147,13 +150,35 @@ export default function SubmissionForm() {
 					<FormField
 						control={form.control}
 						name="name"
-						render={({ field }) => (
+						render={({ field: { onChange, ...field } }) => (
 							<FormItem>
 								<FormLabel>Character name</FormLabel>
 								<FormControl>
-									<Input placeholder="Sidon" {...field} />
+									<Input
+										placeholder="Sidon"
+										{...field}
+										onChange={(event) => {
+											onChange(event)
+											setSearchInput(event.target.value)
+										}}
+									/>
 								</FormControl>
 								<FormMessage />
+								{searchResults && searchResults.length > 0 && (
+									<div className="mt-4">
+										<h3 className="text-lg font-semibold">
+											Characters with similar names are already submitted:
+										</h3>
+										<ul className="list-inside">
+											{searchResults.map(({ item: result }) => (
+												<li key={result.id} className="ml-4">
+													<span>{result.name}</span> -
+													<span className="ml-1">{result.game}</span>
+												</li>
+											))}
+										</ul>
+									</div>
+								)}
 							</FormItem>
 						)}
 					/>

@@ -2,6 +2,7 @@ import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc"
 import { submissionCreationSchema, submissionUpdateSchema } from "./submission.dto"
 import { SubmissionStatus } from "@prisma/client"
 import { z } from "zod"
+import Fuse from "fuse.js"
 
 export const submissionRouter = createTRPCRouter({
 	create: protectedProcedure.input(submissionCreationSchema).mutation(({ input, ctx }) => {
@@ -83,5 +84,21 @@ export const submissionRouter = createTRPCRouter({
 					status: input.status
 				}
 			})
+		}),
+	listSimilar: protectedProcedure.input(z.object({ name: z.string() })).query(async ({ input, ctx }) => {
+		const submissions = await ctx.prisma.submission.findMany({
+			select: {
+				id: true,
+				name: true,
+				game: true
+			}
 		})
+
+		const fuse = new Fuse(submissions, {
+			keys: ["name"],
+			includeScore: true
+		})
+
+		return fuse.search(input.name)
+	})
 })
