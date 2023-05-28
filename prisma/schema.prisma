@@ -3,7 +3,7 @@
 
 generator client {
     provider        = "prisma-client-js"
-    previewFeatures = ["jsonProtocol", "fullTextSearch", "fullTextIndex"]
+    previewFeatures = ["jsonProtocol"]
 }
 
 datasource db {
@@ -77,7 +77,6 @@ model Submission {
     authorId  String
 
     @@index([authorId])
-    @@fulltext([name])
 }
 
 enum SubmissionStatus {
