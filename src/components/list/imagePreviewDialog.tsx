@@ -38,7 +38,7 @@ export default function ImagePreviewDialog({ submission, open, onClose }: ImageP
 							leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
 						>
 							<Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-sky-50 px-4 pb-4 pt-5 text-left shadow-xl transition-all dark:bg-slate-950 sm:my-8 sm:w-full sm:max-w-3xl sm:p-6">
-								<div className="absolute right-0 top-0 hidden pr-4 pt-4 sm:block">
+								<div className="absolute right-0 top-0 pr-4 pt-4">
 									<button
 										type="button"
 										className="rounded-md text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
