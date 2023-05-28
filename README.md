@@ -1,12 +1,37 @@
-# Create T3 App
+<br/>
+<p align="center">
+  <a href="https://github.com/OtterlySpaceLabs/tierlist-rating">
+    <img src="public/logo.png" alt="Logo" width="80" height="80">
+  </a>
 
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
+  <h3 align="center">Tierlist Rating</h3>
 
-## What's next? How do I make an app with this?
+  <p align="center">
+    Also known as "Smash App"
+    <br/>
+    <br/>
+    <a href="https://smash.alex73630.xyz">View live site</a>
+  </p>
+</p>
 
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
+![Stargazers](https://img.shields.io/github/stars/OtterlySpaceLabs/tierlist-rating?style=social)
 
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
+## Table Of Contents
+
+* [About the Project](#about-the-project)
+* [Built With](#built-with)
+* [Getting Started](#getting-started)
+* [Usage](#usage)
+* [Authors](#authors)
+* [Acknowledgements](#acknowledgements)
+
+## About The Project
+
+A community-driven web app that allows a streamer to vote and sort in a tierlist game characters that are chosen by their community.
+
+## Built With
+
+This project uses the [T3 Stack](https://create.t3.gg/) as a startup point, it unites the following tools to make the core of the app:
 
 - [Next.js](https://nextjs.org)
 - [NextAuth.js](https://next-auth.js.org)
@@ -14,15 +39,22 @@ If you are not familiar with the different technologies used in this project, pl
 - [Tailwind CSS](https://tailwindcss.com)
 - [tRPC](https://trpc.io)
 
-## Learn More
+We are also using [uploadthing](https://uploadthing.com/) to handle image upload and storage, [PlanetScale](https://planetscale.com) for our database hosting and [Vercel](https://vercel.com) for our webapp and serverless functions hosting.
 
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
+## Getting Started
 
-- [Documentation](https://create.t3.gg/)
-- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
+**TODO**
 
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
+## Usage
 
-## How do I deploy this?
+**TODO**
 
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+## Authors
+
+* **Alexandre Sanchez** - *[Otterly Space](https://otterly.space) Founder* - [Alexandre Sanchez](https://github.com/alex73630)
+
+## Acknowledgements
+
+* [Theo (T3 + uploadthing)](https://t3.gg/)
+* [TailwindUI](https://tailwindui.com/)
+* [Shadcn UI component library](https://ui.shadcn.com/)
