@@ -7,36 +7,43 @@ import { useForm } from "react-hook-form"
 import { UploadButton } from "@uploadthing/react"
 import { type OurFileRouter } from "../../server/uploadthing"
 import Image from "next/image"
-import { submissionCreationSchema } from "../../server/api/routers/submission/submission.dto"
+import { submissionUpdateSchema } from "../../server/api/routers/submission/submission.dto"
 import { api } from "../../utils/api"
-import { useState } from "react"
+import { useMemo } from "react"
 import { Alert, AlertDescription, AlertTitle } from "../ui/alert"
 import { CheckCheckIcon } from "lucide-react"
 import Link from "next/link"
+import { type Submission } from "@prisma/client"
+import { useRouter } from "next/router"
 
-export default function SubmissionForm() {
-	const [submissionComplete, setSubmissionComplete] = useState(false)
+interface SubmissionEditFormProps {
+	submission: Submission
+}
+
+export default function SubmissionEditForm({ submission }: SubmissionEditFormProps) {
+	const router = useRouter()
+	const submissionComplete = useMemo(() => router.query.success === "true", [router.query])
 	// 1. Define your form.
-	const form = useForm<z.infer<typeof submissionCreationSchema>>({
-		resolver: zodResolver(submissionCreationSchema),
+	const form = useForm<z.infer<typeof submissionUpdateSchema>>({
+		resolver: zodResolver(submissionUpdateSchema),
 		defaultValues: {
-			name: "",
-			game: "",
-			image: ""
+			id: submission.id,
+			name: submission.name,
+			game: submission.game,
+			image: submission.image
 		}
 	})
 
-	const submissionCreationMutate = api.submission.create.useMutation()
+	const submissionUpdateMutate = api.submission.update.useMutation()
 
 	// 2. Define a submit handler.
-	function onSubmit(values: z.infer<typeof submissionCreationSchema>) {
+	function onSubmit(values: z.infer<typeof submissionUpdateSchema>) {
 		// Do something with the form values.
 		// ✅ This will be type-safe and validated.
-		void submissionCreationMutate
+		void submissionUpdateMutate
 			.mutateAsync(values)
 			.then(() => {
-				form.reset()
-				setSubmissionComplete(true)
+				void router.push(`/submit/edit/${submission.id}?success=true`)
 			})
 			.catch((err) => {
 				console.log(err)
@@ -47,7 +54,7 @@ export default function SubmissionForm() {
 			{submissionComplete && (
 				<Alert className="mb-8">
 					<CheckCheckIcon className="h-4 w-4" />
-					<AlertTitle>Submission completed!</AlertTitle>
+					<AlertTitle>Edition completed!</AlertTitle>
 					<AlertDescription>
 						Your submission has been received and will be reviewed by our team.
 					</AlertDescription>
@@ -90,9 +97,13 @@ export default function SubmissionForm() {
 								</Link>
 							</li>
 						</ul>
-						<p>
+						<p className="pb-4">
 							Moderators can reject your submission based on their judgment following these rules and will
 							use principle of caution in case of doubt.
+						</p>
+						<p>
+							<span className="font-semibold">Note on edit:</span> If your submission is already approved,
+							editing it will set it back to pending.
 						</p>
 					</div>
 
@@ -127,8 +138,6 @@ export default function SubmissionForm() {
 											<Image
 												unoptimized
 												src={field.value}
-												// width={200}
-												// height={200}
 												fill
 												className="rounded-sm object-cover"
 												alt="Preview of the image"

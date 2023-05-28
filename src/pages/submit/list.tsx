@@ -5,28 +5,20 @@ import { type GetServerSideProps } from "next"
 import { getServerSession } from "next-auth"
 import { authOptions } from "../../server/auth"
 import { prisma } from "../../server/db"
-import Image from "next/image"
 import TabsNavigation from "../../components/tabsNavigation"
 import { cn } from "../../lib/utils"
-import { useCallback } from "react"
+import { useCallback, useState } from "react"
 import Footer from "../../components/footer"
+import ListItem from "../../components/list/listItem"
+import { useRouter } from "next/router"
+import DeleteDialog from "../../components/list/deleteDialog"
 
 interface SubmissionListPageProps {
 	submissions: Submission[]
 }
 
 export default function SubmissionListPage({ submissions }: SubmissionListPageProps) {
-	const statusBadgeStyle = useCallback((submission: Submission) => {
-		switch (submission.status) {
-			case "PENDING":
-				return "bg-yellow-200 text-yellow-800"
-			case "APPROVED":
-				return "bg-green-200 text-green-800"
-			case "REJECTED":
-				return "bg-red-200 text-red-800"
-		}
-	}, [])
-
+	const router = useRouter()
 	const lineBorderStyle = useCallback(
 		(index: number) => {
 			if (index === submissions.length - 1) {
@@ -37,6 +29,31 @@ export default function SubmissionListPage({ submissions }: SubmissionListPagePr
 		[submissions]
 	)
 
+	const [showDeleteDialog, setShowDeleteDialog] = useState(false)
+	const [submissionToDelete, setSubmissionToDelete] = useState<Submission | null>(null)
+
+	const showDeleteDialogHandler = useCallback(
+		(submission: Submission) => {
+			if (showDeleteDialog) {
+				return
+			}
+			setSubmissionToDelete(submission)
+			setShowDeleteDialog(true)
+		},
+		[showDeleteDialog]
+	)
+
+	const hideDeleteDialogHandler = useCallback(
+		(isDeleted?: boolean) => {
+			if (isDeleted) {
+				void router.replace(router.asPath)
+			}
+			setShowDeleteDialog(false)
+			setSubmissionToDelete(null)
+		},
+		[router]
+	)
+
 	return (
 		<div className="flex h-screen flex-col">
 			<CustomHead title="Submission list" />
@@ -45,39 +62,20 @@ export default function SubmissionListPage({ submissions }: SubmissionListPagePr
 			<main className="mb-auto flex flex-col items-center p-8 pt-0">
 				<section className="mt-8 w-full max-w-6xl">
 					{submissions.length > 0 ? (
-						<ul>
-							{submissions.map((submission, index) => (
-								<li key={submission.id} className={cn("py-4", lineBorderStyle(index))}>
-									<div className="flex flex-col justify-center sm:flex-row sm:justify-normal">
-										<div className="relative mx-auto mb-4 flex h-52 w-52 justify-center object-contain align-middle sm:mx-0 sm:mb-0">
-											<Image
-												unoptimized
-												src={submission.image}
-												alt={submission.name}
-												fill
-												className="rounded bg-sky-100/10 object-cover shadow"
-											/>
-										</div>
-
-										<div className="flex flex-col justify-center sm:px-8">
-											<span className="text-lg font-semibold">{submission.name}</span>
-											<span className="italic">{submission.game}</span>
-											<span className="pt-2">
-												<span className="font-semibold">Status:</span>
-												<span
-													className={cn(
-														"ml-2 rounded-full px-2 py-1 text-sm font-semibold capitalize",
-														statusBadgeStyle(submission)
-													)}
-												>
-													{submission.status.toLowerCase()}
-												</span>
-											</span>
-										</div>
-									</div>
-								</li>
-							))}
-						</ul>
+						<>
+							<DeleteDialog
+								open={showDeleteDialog}
+								submission={submissionToDelete}
+								onClose={hideDeleteDialogHandler}
+							/>
+							<ul>
+								{submissions.map((submission, index) => (
+									<li key={submission.id} className={cn("py-4", lineBorderStyle(index))}>
+										<ListItem submission={submission} showDeleteDialog={showDeleteDialogHandler} />
+									</li>
+								))}
+							</ul>
+						</>
 					) : (
 						<h2 className="text-center text-xl">No submissions yet</h2>
 					)}
@@ -108,8 +106,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 			author: true
 		}
 	})
-
-	console.log(submissions)
 
 	return {
 		props: {
