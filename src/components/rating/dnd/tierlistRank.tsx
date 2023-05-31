@@ -102,7 +102,7 @@ export default function TierlistRankContainer({ rank, entries }: TierlistRankPro
 			</div>
 			<div
 				className={cn(
-					"flex min-h-full w-full gap-2 rounded-r-sm p-2 transition-colors",
+					"flex min-h-full w-full flex-wrap gap-2 rounded-r-sm p-2 transition-colors",
 					isOver && "bg-white/30"
 				)}
 			>

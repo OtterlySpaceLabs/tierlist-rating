@@ -39,7 +39,7 @@ export default function TierlistHandler() {
 							))}
 						</div>
 
-						<div className="flex gap-4">
+						<div className="flex flex-wrap justify-center gap-4">
 							{nonRankedSmashes().map((smash) => (
 								<TierlistCardDnd key={smash.id} smash={smash} />
 							))}
