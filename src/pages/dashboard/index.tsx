@@ -2,12 +2,13 @@ import CustomHead from "../../components/customHead"
 import Header from "../../components/header"
 import TabsNavigation from "../../components/tabsNavigation"
 import { cn } from "../../lib/utils"
-import { useCallback, useState } from "react"
+import { useCallback, useMemo, useState } from "react"
 import { api } from "../../utils/api"
 import Footer from "../../components/footer"
 import ListItem from "../../components/list/listItem"
 import { type Submission } from "@prisma/client"
 import DeleteDialog from "../../components/list/deleteDialog"
+import ButtonRadio from "../../components/smash/buttonRadio"
 
 export default function SubmissionListPage() {
 	const { data: submissions, refetch } = api.submission.listAll.useQuery()
@@ -54,6 +55,21 @@ export default function SubmissionListPage() {
 		[refetch]
 	)
 
+	const [filter, setFilter] = useState<{
+		label: string
+		value: "all" | "PENDING" | "APPROVED" | "REJECTED"
+	}>({ label: "All", value: "all" })
+
+	const filteredSubmissions = useMemo(() => {
+		if (!submissions) {
+			return []
+		}
+		if (filter.value === "all") {
+			return submissions
+		}
+		return submissions.filter((submission) => submission.status === filter.value)
+	}, [submissions, filter])
+
 	return (
 		<div className="flex h-screen flex-col">
 			<CustomHead title="Submission list" />
@@ -68,8 +84,22 @@ export default function SubmissionListPage() {
 								submission={submissionToDelete}
 								onClose={hideDeleteDialogHandler}
 							/>
+							<ButtonRadio
+								options={[
+									{ label: "All", value: "all" },
+									{ label: "Pending", value: "PENDING" },
+									{ label: "Approved", value: "APPROVED" },
+									{ label: "Rejected", value: "REJECTED" }
+								]}
+								value={filter}
+								onChange={(value) =>
+									setFilter(
+										value as { label: string; value: "all" | "PENDING" | "APPROVED" | "REJECTED" }
+									)
+								}
+							/>
 							<ul>
-								{submissions.map((submission, index) => (
+								{filteredSubmissions.map((submission, index) => (
 									<li key={submission.id} className={cn("py-4", lineBorderStyle(index))}>
 										<ListItem
 											submission={submission}

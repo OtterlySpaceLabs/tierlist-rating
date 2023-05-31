@@ -18,7 +18,7 @@ export default function ButtonRadio({ title, options, onChange, value }: ButtonR
 			value
 				? typeof value === "string"
 					? options.find((option) => option.value === value) || null
-					: value
+					: options.find((option) => option.value === value.value) || null
 				: null,
 		[value, options]
 	)
