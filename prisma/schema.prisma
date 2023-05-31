@@ -91,15 +91,16 @@ enum SubmissionStatus {
 }
 
 model SmashEntry {
-    id           String     @id @default(cuid())
-    createdAt    DateTime   @default(now())
-    updatedAt    DateTime   @updatedAt
+    id           String      @id @default(cuid())
+    createdAt    DateTime    @default(now())
+    updatedAt    DateTime    @updatedAt
     vote         SmashVote
     type         SmashType?
     authorId     String
-    author       User       @relation(fields: [authorId], references: [id], onDelete: Cascade)
+    author       User        @relation(fields: [authorId], references: [id], onDelete: Cascade)
     submissionId String
-    submission   Submission @relation(fields: [submissionId], references: [id], onDelete: Cascade)
+    submission   Submission  @relation(fields: [submissionId], references: [id], onDelete: Cascade)
+    RankEntry    RankEntry[]
 
     @@unique([authorId, submissionId])
     @@index([authorId])
@@ -143,20 +144,22 @@ model TierlistRank {
 }
 
 model RankEntry {
-    id             String       @id @default(cuid())
-    createdAt      DateTime     @default(now())
-    updatedAt      DateTime     @updatedAt
-    rankId         String
-    rank           TierlistRank @relation(fields: [tierlistRankId], references: [id], onDelete: Cascade)
-    index          Int
-    authorId       String
-    author         User         @relation(fields: [authorId], references: [id], onDelete: Cascade)
-    submissionId   String
-    submission     Submission   @relation(fields: [submissionId], references: [id], onDelete: Cascade)
-    tierlistRankId String
+    id           String       @id @default(cuid())
+    createdAt    DateTime     @default(now())
+    updatedAt    DateTime     @updatedAt
+    rankId       String
+    rank         TierlistRank @relation(fields: [rankId], references: [id], onDelete: Cascade)
+    index        Int
+    authorId     String
+    author       User         @relation(fields: [authorId], references: [id], onDelete: Cascade)
+    submissionId String
+    submission   Submission   @relation(fields: [submissionId], references: [id], onDelete: Cascade)
+    smashEntryId String
+    smashEntry   SmashEntry   @relation(fields: [smashEntryId], references: [id], onDelete: Cascade)
 
-    @@unique([authorId, submissionId])
+    @@unique([authorId, smashEntryId])
     @@index([authorId])
     @@index([submissionId])
-    @@index([tierlistRankId])
+    @@index([rankId])
+    @@index([smashEntryId])
 }

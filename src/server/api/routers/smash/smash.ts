@@ -42,7 +42,10 @@ export const smashRouter = createTRPCRouter({
 
 		const smashEntries = await ctx.prisma.smashEntry.findMany({
 			where: {
-				authorId: ctx.session.user.id
+				authorId: ctx.session.user.id,
+				submission: {
+					status: "APPROVED"
+				}
 			},
 			include: {
 				submission: {

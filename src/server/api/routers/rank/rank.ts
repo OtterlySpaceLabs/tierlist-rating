@@ -70,6 +70,52 @@ export const rankRouter = createTRPCRouter({
 
 		return tierlist
 	}),
+	getEntriesToRank: protectedProcedure.query(async ({ ctx }) => {
+		if (!ctx.session.user.isStreamer) {
+			throw new Error("You are not authorized to vote.")
+		}
+
+		const smashEntries = await ctx.prisma.smashEntry.findMany({
+			where: {
+				authorId: ctx.session.user.id,
+				submission: {
+					status: "APPROVED"
+				},
+				vote: "SMASH"
+			},
+			include: {
+				submission: {
+					include: {
+						author: true
+					}
+				}
+			}
+		})
+		return smashEntries
+	}),
+	getRankEntries: protectedProcedure.query(async ({ ctx }) => {
+		if (!ctx.session.user.isStreamer) {
+			throw new Error("You are not authorized to view tierlists.")
+		}
+
+		const rankEntries = await ctx.prisma.rankEntry.findMany({
+			where: {
+				rank: {
+					tierlist: {
+						authorId: ctx.session.user.id
+					}
+				},
+				submission: {
+					status: "APPROVED"
+				}
+			},
+			include: {
+				rank: true
+			}
+		})
+
+		return rankEntries
+	}),
 	createRank: protectedProcedure.input(rankCreationSchema).mutation(async ({ input, ctx }) => {
 		if (!ctx.session.user.isStreamer) {
 			throw new Error("You are not authorized to create tierlists.")
@@ -285,13 +331,39 @@ export const rankRouter = createTRPCRouter({
 			}
 		})
 
+		const smashEntry = await ctx.prisma.smashEntry.findFirst({
+			where: {
+				id: input.smashId
+			}
+		})
+
+		if (!smashEntry) {
+			throw new Error("The smash entry does not exist.")
+		}
+
 		const newRankEntry = await ctx.prisma.rankEntry.create({
 			data: {
-				rankId: input.rankId,
-				submissionId: input.submissionId,
+				rank: {
+					connect: {
+						id: input.rankId
+					}
+				},
+				submission: {
+					connect: {
+						id: smashEntry.submissionId
+					}
+				},
+				smashEntry: {
+					connect: {
+						id: input.smashId
+					}
+				},
 				index: input.index ?? rankEntries.length,
-				authorId: ctx.session.user.id,
-				tierlistRankId: tierlistRanks.id
+				author: {
+					connect: {
+						id: ctx.session.user.id
+					}
+				}
 			}
 		})
 
@@ -346,6 +418,8 @@ export const rankRouter = createTRPCRouter({
 				}
 			}
 		})
+
+		console.log(input, rankEntry, newRank)
 
 		if (!rankEntry || !newRank) {
 			throw new Error("You do not have a tierlist to update.")

@@ -1,7 +1,7 @@
 import { z } from "zod"
 
 export const rankEntryCreationSchema = z.object({
-	submissionId: z.string(),
+	smashId: z.string(),
 	rankId: z.string(),
 	index: z.number().min(0, "Order must be positive").max(100, "Order must be less than 100")
 })
