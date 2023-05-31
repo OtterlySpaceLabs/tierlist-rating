@@ -67,6 +67,9 @@ export const submissionRouter = createTRPCRouter({
 		return ctx.prisma.submission.findMany({
 			include: {
 				author: true
+			},
+			orderBy: {
+				createdAt: "desc"
 			}
 		})
 	}),
