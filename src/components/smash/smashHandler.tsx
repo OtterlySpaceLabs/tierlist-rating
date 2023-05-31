@@ -9,6 +9,7 @@ import { useForm } from "react-hook-form"
 import { type z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Form, FormField, FormMessage } from "../ui/form"
+import ImagePreviewDialog from "../list/imagePreviewDialog"
 
 interface SmashHandlerProps {
 	submissions: (Submission & {
@@ -84,6 +85,8 @@ export default function SmashHandler({ submissions, refetch }: SmashHandlerProps
 		}
 	}
 
+	const [openPreview, setOpenPreview] = useState(false)
+
 	return (
 		<>
 			{currentSubmission && (
@@ -94,12 +97,18 @@ export default function SmashHandler({ submissions, refetch }: SmashHandlerProps
 							<span className="font-bold capitalize">{currentSubmission.game}</span>
 						</span>
 						<div className="relative mb-4 h-96 w-96">
+							<ImagePreviewDialog
+								submission={currentSubmission}
+								open={openPreview}
+								onClose={() => setOpenPreview(false)}
+							/>
 							<Image
 								unoptimized
 								src={currentSubmission.image}
 								alt={currentSubmission.name}
 								fill
-								className="object-cover"
+								className="cursor-pointer rounded-sm bg-sky-100/10 object-cover shadow"
+								onClick={() => setOpenPreview(true)}
 							/>
 						</div>
 						<span>
