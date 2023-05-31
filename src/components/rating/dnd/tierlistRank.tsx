@@ -1,9 +1,10 @@
 import { type TierlistRank } from "@prisma/client"
+import TextareaAutosize from "react-textarea-autosize"
 import { type SmashWithSubmissionAndAuthor } from "../../../server/api/routers/smash/smash.interface"
 import TierlistCardDnd from "./tierlistCard"
 import { useDrop } from "react-dnd"
 import { useTierlistStore } from "../tierlistStore"
-import { useMemo } from "react"
+import { useMemo, useState } from "react"
 import { cn } from "../../../lib/utils"
 import { api } from "../../../utils/api"
 
@@ -24,34 +25,40 @@ const rankColors = {
 }
 
 export default function TierlistRankContainer({ rank, entries }: TierlistRankProps) {
-	const [addRankEntry, udpateRankEntry, isRanked, rankedSmashes] = useTierlistStore((store) => [
-		store.addRankEntry,
-		store.udpateRankEntry,
-		store.isRanked,
-		store.rankedSmashes
-	])
+	const [addRankEntry, udpateRankEntry, addRankEntryToSmashRef, isRanked, rankEntryToSmash] = useTierlistStore(
+		(store) => [
+			store.addRankEntry,
+			store.udpateRankEntry,
+			store.addRankEntryToSmashRef,
+			store.isRanked,
+			store.rankEntryToSmash
+		]
+	)
 
 	const addRankEntryMutation = api.rank.addRankEntry.useMutation()
 	const updateRankEntryMutation = api.rank.updateRankEntry.useMutation()
+
+	const updateRankMutation = api.rank.updateRank.useMutation()
 
 	const [{ isOver }, drop] = useDrop({
 		accept: "SMASH",
 		drop: async (item: SmashWithSubmissionAndAuthor) => {
 			if (isRanked(item.id)) {
-				const rankedSmash = [...rankedSmashes].find((smash) => smash.smashId === item.id)
+				const rankedSmash = [...rankEntryToSmash].find((smash) => smash.smashId === item.id)
 				if (!rankedSmash) return
-				const updateRankEntryValue = await updateRankEntryMutation.mutateAsync({
+				udpateRankEntry(item.id, rank.id)
+				await updateRankEntryMutation.mutateAsync({
 					id: rankedSmash.rankEntryId,
 					rankId: rank.id
 				})
-				udpateRankEntry(item.id, rank.id, updateRankEntryValue.id)
 			} else {
+				addRankEntry(item.id, rank.id)
 				const addRankEntryValue = await addRankEntryMutation.mutateAsync({
 					smashId: item.id,
 					rankId: rank.id,
 					index: entries.length
 				})
-				addRankEntry(item.id, rank.id, addRankEntryValue.id)
+				addRankEntryToSmashRef(item.id, addRankEntryValue.id)
 			}
 		},
 		collect: (monitor) => ({
@@ -67,10 +74,31 @@ export default function TierlistRankContainer({ rank, entries }: TierlistRankPro
 		return "bg-blue-50"
 	}, [rank.order])
 
+	const [rankName, setRankName] = useState(rank.name)
+
+	const handleRankNameChange = async (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+		if (e.target.value === rank.name) return
+		try {
+			await updateRankMutation.mutateAsync({
+				id: rank.id,
+				name: e.target.value,
+				order: rank.order
+			})
+		} catch (error) {
+			setRankName(rank.name)
+		}
+	}
+
 	return (
 		<div ref={drop} className="flex min-h-[7rem] rounded-sm bg-slate-300/20">
 			<div className={cn("flex w-32 items-center justify-center rounded-l-sm text-black", rankColor)}>
-				<span>{rank.name}</span>
+				<TextareaAutosize
+					value={rankName}
+					onChange={(e) => setRankName(e.target.value)}
+					onBlur={(e) => void handleRankNameChange(e)}
+					className="w-full resize-none border-0 bg-transparent p-1 text-center font-sans font-bold"
+					maxRows={4}
+				/>
 			</div>
 			<div
 				className={cn(

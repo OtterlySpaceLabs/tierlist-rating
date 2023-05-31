@@ -6,13 +6,16 @@ export interface TierlistStore {
 	tierlist: Tierlist | null
 	ranks: TierlistRank[]
 	smashes: SmashWithSubmissionAndAuthor[]
-	rankedSmashes: Set<{ smashId: string; rankId: string; rankEntryId: string; index: number }>
+	rankedSmashes: Set<{ smashId: string; rankId: string; index: number }>
+	rankEntryToSmash: Set<{ smashId: string; rankEntryId: string }>
 	setTierlist: (tierlist: Tierlist & { ranks: TierlistRank[] }) => void
 	setRanks: (ranks: TierlistRank[]) => void
 	setSmashes: (smashes: SmashWithSubmissionAndAuthor[]) => void
 	loadRanksEntries: (rankEntries: RankEntry[]) => void
-	addRankEntry: (smashId: string, rankId: string, rankEntryId: string, index?: number) => void
-	udpateRankEntry: (smashId: string, rankId: string, rankEntryId: string, index?: number) => void
+	addRankEntry: (smashId: string, rankId: string, index?: number) => void
+	addRankEntryToSmashRef: (smashId: string, rankEntryId: string) => void
+	udpateRankEntry: (smashId: string, rankId: string, index?: number) => void
+	updateRankEntryToSmashRef: (smashId: string, rankEntryId: string) => void
 	removeRankEntry: (smashId: string) => void
 	getEntriesForRank: (rankId: string) => SmashWithSubmissionAndAuthor[]
 	getNonRankedSmashes: () => SmashWithSubmissionAndAuthor[]
@@ -24,6 +27,7 @@ export const useTierlistStore = create<TierlistStore>()((set, get) => ({
 	ranks: [],
 	smashes: [],
 	rankedSmashes: new Set(),
+	rankEntryToSmash: new Set(),
 	setTierlist: ({ ranks, ...tierlist }) => {
 		set({ tierlist })
 		set({ ranks: ranks })
@@ -35,26 +39,46 @@ export const useTierlistStore = create<TierlistStore>()((set, get) => ({
 			rankEntries.map((entry) => ({
 				smashId: entry.smashEntryId,
 				rankId: entry.rankId,
-				rankEntryId: entry.id,
 				index: entry.index
 			}))
 		)
-		set({ rankedSmashes: newRankedSmashes })
+		const newRankEntryToSmash = new Set(
+			rankEntries.map((entry) => ({
+				smashId: entry.smashEntryId,
+				rankEntryId: entry.id
+			}))
+		)
+		set({ rankedSmashes: newRankedSmashes, rankEntryToSmash: newRankEntryToSmash })
 	},
-	addRankEntry: (smashId, rankId, rankEntryId, index) => {
+	addRankEntry: (smashId, rankId, index) => {
 		const { rankedSmashes } = get()
-		rankedSmashes.add({ smashId, rankId, rankEntryId, index: index ?? rankedSmashes.size })
+		rankedSmashes.add({ smashId, rankId, index: index ?? rankedSmashes.size })
 		set({ rankedSmashes })
 	},
-	udpateRankEntry: (smashId, rankId, rankEntryId, index) => {
+	udpateRankEntry: (smashId, rankId, index) => {
 		const { rankedSmashes } = get()
 		const currentEntry = [...rankedSmashes].find((entry) => entry.smashId === smashId)
 		if (!currentEntry) {
 			throw new Error("Rank entry does not exist.")
 		}
 		rankedSmashes.delete(currentEntry)
-		rankedSmashes.add({ smashId, rankId, rankEntryId, index: index ?? rankedSmashes.size })
+		rankedSmashes.add({ smashId, rankId, index: index ?? rankedSmashes.size })
 		set({ rankedSmashes })
+	},
+	addRankEntryToSmashRef: (smashId, rankEntryId) => {
+		const { rankEntryToSmash } = get()
+		rankEntryToSmash.add({ smashId, rankEntryId })
+		set({ rankEntryToSmash })
+	},
+	updateRankEntryToSmashRef: (smashId, rankEntryId) => {
+		const { rankEntryToSmash } = get()
+		const currentEntry = [...rankEntryToSmash].find((entry) => entry.smashId === smashId)
+		if (!currentEntry) {
+			throw new Error("Rank entry does not exist.")
+		}
+		rankEntryToSmash.delete(currentEntry)
+		rankEntryToSmash.add({ smashId, rankEntryId })
+		set({ rankEntryToSmash })
 	},
 	removeRankEntry: (smashId) => {
 		const { rankedSmashes } = get()
