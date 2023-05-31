@@ -55,6 +55,9 @@ model User {
     accounts      Account[]
     sessions      Session[]
     Submission    Submission[]
+    SmashEntries  SmashEntry[]
+    RankEntry     RankEntry[]
+    Tierlist      Tierlist[]
 }
 
 model VerificationToken {
@@ -66,15 +69,17 @@ model VerificationToken {
 }
 
 model Submission {
-    id        String           @id @default(cuid())
-    createdAt DateTime         @default(now())
-    updatedAt DateTime         @updatedAt
-    name      String
-    game      String
-    image     String
-    status    SubmissionStatus @default(PENDING)
-    author    User             @relation(fields: [authorId], references: [id], onDelete: Cascade)
-    authorId  String
+    id           String           @id @default(cuid())
+    createdAt    DateTime         @default(now())
+    updatedAt    DateTime         @updatedAt
+    name         String
+    game         String
+    image        String
+    status       SubmissionStatus @default(PENDING)
+    author       User             @relation(fields: [authorId], references: [id], onDelete: Cascade)
+    authorId     String
+    SmashEntries SmashEntry[]
+    RankEntry    RankEntry[]
 
     @@index([authorId])
 }
@@ -83,4 +88,78 @@ enum SubmissionStatus {
     PENDING
     APPROVED
     REJECTED
+}
+
+model SmashEntry {
+    id           String      @id @default(cuid())
+    createdAt    DateTime    @default(now())
+    updatedAt    DateTime    @updatedAt
+    vote         SmashVote
+    type         SmashType?
+    authorId     String
+    author       User        @relation(fields: [authorId], references: [id], onDelete: Cascade)
+    submissionId String
+    submission   Submission  @relation(fields: [submissionId], references: [id], onDelete: Cascade)
+    RankEntry    RankEntry[]
+
+    @@unique([authorId, submissionId])
+    @@index([authorId])
+    @@index([submissionId])
+}
+
+enum SmashVote {
+    SMASH
+    PASS
+}
+
+enum SmashType {
+    BOTTOM
+    TOP
+    VERSE
+}
+
+model Tierlist {
+    id        String         @id @default(cuid())
+    createdAt DateTime       @default(now())
+    updatedAt DateTime       @updatedAt
+    ranks     TierlistRank[]
+    authorId  String
+    author    User           @relation(fields: [authorId], references: [id], onDelete: Cascade)
+
+    @@unique([authorId])
+    @@index([authorId])
+}
+
+model TierlistRank {
+    id         String      @id @default(cuid())
+    createdAt  DateTime    @default(now())
+    updatedAt  DateTime    @updatedAt
+    name       String
+    order      Int
+    tierlistId String
+    tierlist   Tierlist    @relation(fields: [tierlistId], references: [id], onDelete: Cascade)
+    entries    RankEntry[]
+
+    @@index([tierlistId])
+}
+
+model RankEntry {
+    id           String       @id @default(cuid())
+    createdAt    DateTime     @default(now())
+    updatedAt    DateTime     @updatedAt
+    rankId       String
+    rank         TierlistRank @relation(fields: [rankId], references: [id], onDelete: Cascade)
+    index        Int
+    authorId     String
+    author       User         @relation(fields: [authorId], references: [id], onDelete: Cascade)
+    submissionId String
+    submission   Submission   @relation(fields: [submissionId], references: [id], onDelete: Cascade)
+    smashEntryId String
+    smashEntry   SmashEntry   @relation(fields: [smashEntryId], references: [id], onDelete: Cascade)
+
+    @@unique([authorId, smashEntryId])
+    @@index([authorId])
+    @@index([submissionId])
+    @@index([rankId])
+    @@index([smashEntryId])
 }
