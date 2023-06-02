@@ -24,6 +24,12 @@ export default function TabsNavigation() {
 				show: sessionData?.user.isStreamer
 			},
 			{
+				name: "My votes",
+				href: "/streamer/smash/list",
+				current: router.pathname === "/streamer/smash/list",
+				show: sessionData?.user.isStreamer
+			},
+			{
 				name: "Tierlist",
 				href: "/streamer/tierlist",
 				current: router.pathname === "/streamer/tierlist",

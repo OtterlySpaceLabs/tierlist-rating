@@ -96,8 +96,7 @@ export default function TierlistRankContainer({ rank, entries }: TierlistRankPro
 					value={rankName}
 					onChange={(e) => setRankName(e.target.value)}
 					onBlur={(e) => void handleRankNameChange(e)}
-					className="w-full resize-none border-0 bg-transparent p-1 text-center font-sans font-bold"
-					maxRows={4}
+					className="w-full resize-none overflow-hidden border-0 bg-transparent p-1 text-center font-sans font-bold"
 				/>
 			</div>
 			<div
