@@ -1,11 +1,12 @@
-import { SmashType, type SmashEntry, type Submission, type User, SmashVote } from "@prisma/client"
+import { SmashType, type SmashEntry, SmashVote, type Submission } from "@prisma/client"
 import { Fragment, useCallback } from "react"
 import { Dialog, Transition } from "@headlessui/react"
 import Image from "next/image"
 import { XMarkIcon } from "@heroicons/react/24/outline"
+import { type SubmissionWithAuthor } from "../../server/api/routers/submission/submission.interface"
 
 interface ImagePreviewDialogProps {
-	submission: Submission & { author?: User }
+	submission: SubmissionWithAuthor | Submission
 	smash?: SmashEntry
 	open: boolean
 	onClose: () => void
@@ -95,7 +96,7 @@ export default function ImagePreviewDialog({ submission, smash, open, onClose }:
 												<p className="pt-2 text-sm font-bold text-gray-500 dark:text-gray-400">
 													{submission.name} - {submission.game}
 												</p>
-												{submission.author?.name && (
+												{"author" in submission && submission.author?.name && (
 													<p className="pt-2 text-sm text-gray-500 dark:text-gray-400">
 														Submitted by{" "}
 														<span className="font-bold">{submission.author.name}</span>
