@@ -9,6 +9,7 @@ import ListItem from "../../components/list/listItem"
 import { type Submission } from "@prisma/client"
 import DeleteDialog from "../../components/list/deleteDialog"
 import ButtonRadio from "../../components/smash/buttonRadio"
+import StatsHeader from "../../components/statsHeader"
 
 export default function SubmissionListPage() {
 	const { data: submissions, refetch } = api.submission.listAll.useQuery()
@@ -70,6 +71,30 @@ export default function SubmissionListPage() {
 		return submissions.filter((submission) => submission.status === filter.value)
 	}, [submissions, filter])
 
+	const stats = useMemo(() => {
+		if (!submissions) {
+			return []
+		}
+		return [
+			{
+				name: "Total",
+				value: submissions.length
+			},
+			{
+				name: "Pending",
+				value: submissions.filter((submission) => submission.status === "PENDING").length
+			},
+			{
+				name: "Approved",
+				value: submissions.filter((submission) => submission.status === "APPROVED").length
+			},
+			{
+				name: "Rejected",
+				value: submissions.filter((submission) => submission.status === "REJECTED").length
+			}
+		]
+	}, [submissions])
+
 	return (
 		<div className="flex h-screen flex-col">
 			<CustomHead title="Submission list" />
@@ -84,6 +109,7 @@ export default function SubmissionListPage() {
 								submission={submissionToDelete}
 								onClose={hideDeleteDialogHandler}
 							/>
+							<StatsHeader stats={stats} />
 							<ButtonRadio
 								options={[
 									{ label: "All", value: "all" },

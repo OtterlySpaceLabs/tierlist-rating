@@ -1,16 +1,37 @@
-import { type Submission, type User } from "@prisma/client"
-import { Fragment } from "react"
+import { SmashType, type SmashEntry, type Submission, type User, SmashVote } from "@prisma/client"
+import { Fragment, useCallback } from "react"
 import { Dialog, Transition } from "@headlessui/react"
 import Image from "next/image"
 import { XMarkIcon } from "@heroicons/react/24/outline"
 
 interface ImagePreviewDialogProps {
 	submission: Submission & { author?: User }
+	smash?: SmashEntry
 	open: boolean
 	onClose: () => void
 }
 
-export default function ImagePreviewDialog({ submission, open, onClose }: ImagePreviewDialogProps) {
+export default function ImagePreviewDialog({ submission, smash, open, onClose }: ImagePreviewDialogProps) {
+	const smashTypeToString = useCallback((smashType: SmashType) => {
+		switch (smashType) {
+			case SmashType.TOP:
+				return "Top"
+			case SmashType.VERSE:
+				return "Versatile"
+			case SmashType.BOTTOM:
+				return "Bottom"
+		}
+	}, [])
+
+	const smashVoteToString = useCallback((smashVote: SmashVote) => {
+		switch (smashVote) {
+			case SmashVote.SMASH:
+				return "Smash"
+			case SmashVote.PASS:
+				return "Pass"
+		}
+	}, [])
+
 	return (
 		<Transition.Root show={open} as={Fragment}>
 			<Dialog as="div" className="relative z-10" onClose={onClose}>
@@ -49,7 +70,7 @@ export default function ImagePreviewDialog({ submission, open, onClose }: ImageP
 									</button>
 								</div>
 								<div className="sm:flex sm:items-start">
-									<div className="mt-3 flex flex-col text-center sm:ml-4 sm:mt-0 sm:text-left">
+									<div className="mt-3 flex w-full flex-col text-center sm:ml-4 sm:mt-0 sm:text-left">
 										<Dialog.Title
 											as="h3"
 											className="text-base font-semibold leading-6 text-gray-900 dark:text-white"
@@ -57,26 +78,50 @@ export default function ImagePreviewDialog({ submission, open, onClose }: ImageP
 											Image
 										</Dialog.Title>
 
-										<div className="max-h[90vh] max-w[90vw] relative mt-2 h-full w-full">
-											<Image
-												unoptimized
-												src={submission.image}
-												alt={submission.name}
-												width={1000}
-												height={1000}
-											/>
+										<div className="mt-2">
+											<div className="relative h-[75vh]">
+												<Image
+													unoptimized
+													src={submission.image}
+													alt={submission.name}
+													fill
+													className="object-contain"
+												/>
+											</div>
 										</div>
 
-										<div className="mt-2">
-											<p className="pt-2 text-sm font-bold text-gray-500 dark:text-gray-400">
-												{submission.name} - {submission.game}
-											</p>
-											{submission.author?.name && (
-												<p className="pt-2 text-sm text-gray-500 dark:text-gray-400">
-													Submitted by{" "}
-													<span className="font-bold">{submission.author.name}</span>
+										<div className="mt-2 grid grid-cols-2">
+											<div>
+												<p className="pt-2 text-sm font-bold text-gray-500 dark:text-gray-400">
+													{submission.name} - {submission.game}
 												</p>
-											)}
+												{submission.author?.name && (
+													<p className="pt-2 text-sm text-gray-500 dark:text-gray-400">
+														Submitted by{" "}
+														<span className="font-bold">{submission.author.name}</span>
+													</p>
+												)}
+											</div>
+											<div>
+												{smash && (
+													<>
+														<p className="pt-2 text-sm text-gray-500 dark:text-gray-400">
+															You voted{" "}
+															<span className="font-bold">
+																{smashVoteToString(smash.vote)}
+															</span>
+														</p>
+														{smash.type && (
+															<p className="pt-2 text-sm text-gray-500 dark:text-gray-400">
+																You think they are{" "}
+																<span className="font-bold">
+																	{smashTypeToString(smash.type)}
+																</span>
+															</p>
+														)}
+													</>
+												)}
+											</div>
 										</div>
 									</div>
 								</div>

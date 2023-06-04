@@ -67,8 +67,8 @@ export default function TierlistPage() {
 			<CustomHead title="Smash" />
 			<Header />
 			<TabsNavigation />
-			<main className="my-auto flex min-h-max flex-col items-center p-8">
-				<section className="mt-8 w-full max-w-4xl">
+			<main className="my-auto flex min-h-max flex-col items-center p-8 pt-0">
+				<section className="w-full max-w-4xl">
 					<TierlistHandler />
 				</section>
 			</main>

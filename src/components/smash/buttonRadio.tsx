@@ -46,7 +46,7 @@ export default function ButtonRadio({ title, options, onChange, value }: ButtonR
 									checked
 										? "bg-orange-600 text-white hover:bg-orange-500"
 										: "bg-white text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50",
-									"text-md flex min-w-[4rem] cursor-pointer items-center justify-center rounded-md px-3 py-3 font-semibold focus:outline-none sm:flex-1"
+									"text-md flex min-w-[6rem] cursor-pointer items-center justify-center rounded-md px-3 py-3 font-semibold focus:outline-none sm:flex-1"
 								)
 							}
 						>
