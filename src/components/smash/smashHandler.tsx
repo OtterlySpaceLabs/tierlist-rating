@@ -10,11 +10,10 @@ import { type z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Form, FormField, FormMessage } from "../ui/form"
 import ImagePreviewDialog from "../list/imagePreviewDialog"
+import { type SubmissionWithAuthor } from "../../server/api/routers/submission/submission.interface"
 
 interface SmashHandlerProps {
-	submissions: (Submission & {
-		author: User
-	})[]
+	submissions: SubmissionWithAuthor[]
 	refetch: () => void
 }
 
@@ -46,8 +45,8 @@ const smashTypeOptions = [
 
 export default function SmashHandler({ submissions, refetch }: SmashHandlerProps) {
 	const randSubmissions = useMemo(() => submissions.sort(() => Math.random() - 0.5), [submissions])
-	const [votedSubmissions, setVotedSubmissions] = useState<(Submission & { author: User })[]>([])
-	const [currentSubmission, setCurrentSubmission] = useState<(Submission & { author: User }) | null>(null)
+	const [votedSubmissions, setVotedSubmissions] = useState<SubmissionWithAuthor[]>([])
+	const [currentSubmission, setCurrentSubmission] = useState<SubmissionWithAuthor | null>(null)
 	const getNextSubmission = useMemo(() => {
 		if (currentSubmission) {
 			return currentSubmission

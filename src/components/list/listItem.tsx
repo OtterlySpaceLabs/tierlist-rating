@@ -1,4 +1,4 @@
-import { type User, type Submission } from "@prisma/client"
+import { type Submission } from "@prisma/client"
 import Image from "next/image"
 import { useMemo, useState } from "react"
 import { cn } from "../../lib/utils"
@@ -6,6 +6,7 @@ import { CheckCircleIcon, PencilSquareIcon, TrashIcon, XCircleIcon } from "@hero
 import { api } from "../../utils/api"
 import Link from "next/link"
 import ImagePreviewDialog from "./imagePreviewDialog"
+import { type SubmissionWithAuthor } from "../../server/api/routers/submission/submission.interface"
 
 interface ListItemProps {
 	submission: Submission
@@ -15,7 +16,7 @@ interface ListItemProps {
 }
 
 interface ListItemModerationProps {
-	submission: Submission & { author: User }
+	submission: SubmissionWithAuthor
 	moderationMode: true
 	onStatusChange?: () => void
 	showDeleteDialog: (submission: Submission) => void
