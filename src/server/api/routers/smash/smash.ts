@@ -30,7 +30,13 @@ export const smashRouter = createTRPCRouter({
 				}
 			},
 			include: {
-				author: true
+				author: {
+					select: {
+						id: true,
+						name: true,
+						image: true
+					}
+				}
 			}
 		})
 		return submissions
@@ -50,7 +56,13 @@ export const smashRouter = createTRPCRouter({
 			include: {
 				submission: {
 					include: {
-						author: true
+						author: {
+							select: {
+								id: true,
+								name: true,
+								image: true
+							}
+						}
 					}
 				}
 			}

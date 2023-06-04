@@ -86,7 +86,13 @@ export const rankRouter = createTRPCRouter({
 			include: {
 				submission: {
 					include: {
-						author: true
+						author: {
+							select: {
+								id: true,
+								name: true,
+								image: true
+							}
+						}
 					}
 				}
 			}
