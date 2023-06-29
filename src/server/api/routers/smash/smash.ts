@@ -1,5 +1,5 @@
 import { createTRPCRouter, protectedProcedure } from "../../trpc"
-import { smashVoteCreationSchema } from "./smash.dto"
+import { smashVoteCreationSchema, smashVoteEditionSchema } from "./smash.dto"
 
 export const smashRouter = createTRPCRouter({
 	vote: protectedProcedure.input(smashVoteCreationSchema).mutation(async ({ input, ctx }) => {
@@ -14,6 +14,38 @@ export const smashRouter = createTRPCRouter({
 			}
 		})
 		return vote
+	}),
+	editVote: protectedProcedure.input(smashVoteEditionSchema).mutation(async ({ input, ctx }) => {
+		if (!ctx.session.user.isStreamer) {
+			throw new Error("You are not authorized to vote.")
+		}
+
+		const vote = await ctx.prisma.smashEntry.findUnique({
+			where: {
+				id: input.smashId
+			}
+		})
+
+		if (!vote) {
+			throw new Error("Vote not found.")
+		}
+
+		if (vote.authorId !== ctx.session.user.id) {
+			throw new Error("You are not authorized to edit this vote.")
+		}
+
+		const updatedVote = await ctx.prisma.smashEntry.update({
+			where: {
+				id: input.smashId
+			},
+
+			data: {
+				vote: input.vote,
+				type: input.type
+			}
+		})
+
+		return updatedVote
 	}),
 	getSubmissionsToVote: protectedProcedure.query(async ({ ctx }) => {
 		if (!ctx.session.user.isStreamer) {

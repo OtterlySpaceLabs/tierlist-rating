@@ -77,8 +77,7 @@ export default function ListSmashItem({ smash }: ListItemProps) {
 				</div>
 			</div>
 
-			{/* // TODO - Make the edit page */}
-			{/* <div className="flex flex-col items-end justify-center sm:ml-auto sm:px-8">
+			<div className="flex flex-col items-end justify-center sm:ml-auto sm:px-8">
 				<div className="mt-2 flex gap-2">
 					<Link
 						href={`/streamer/smash/edit/${smash.id}`}
@@ -87,8 +86,17 @@ export default function ListSmashItem({ smash }: ListItemProps) {
 						<PencilSquareIcon className="-ml-0.5 h-5 w-5" aria-hidden="true" />
 						Edit vote
 					</Link>
+					{/* TODO: Implement delete vote */}
+					{/* <button
+						type="button"
+						className="inline-flex items-center gap-x-1.5 rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600"
+					// onClick={() => void showDeleteDialog(submission)}
+					>
+						<TrashIcon className="-ml-0.5 h-5 w-5" aria-hidden="true" />
+						Delete
+					</button> */}
 				</div>
-			</div> */}
+			</div>
 		</div>
 	)
 }
