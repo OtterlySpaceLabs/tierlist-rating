@@ -1,4 +1,3 @@
-import { type User, type Submission } from "@prisma/client"
 import Image from "next/image"
 import { useEffect, useMemo, useState } from "react"
 import { Button } from "../ui/button"

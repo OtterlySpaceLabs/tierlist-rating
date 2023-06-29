@@ -18,8 +18,8 @@ import TierlistHandler from "../../components/rating/tierlistHandler"
 export default function TierlistPage() {
 	const {
 		data: fetchedSmashes,
-		isLoading: isSmashesLoading,
-		refetch: refetchSmashes
+		isLoading: isSmashesLoading
+		// refetch: refetchSmashes
 	} = api.rank.getEntriesToRank.useQuery(undefined, {
 		refetchOnMount: false,
 		refetchOnWindowFocus: false
@@ -27,8 +27,8 @@ export default function TierlistPage() {
 
 	const {
 		data: fetchedTierlist,
-		isLoading: isTierlistLoading,
-		refetch: refetchTierlist
+		isLoading: isTierlistLoading
+		// refetch: refetchTierlist
 	} = api.rank.getTierlist.useQuery(undefined, {
 		refetchOnMount: false,
 		refetchOnWindowFocus: false
@@ -36,8 +36,8 @@ export default function TierlistPage() {
 
 	const {
 		data: rankEntries,
-		isLoading: isRankEntriesLoading,
-		refetch: refetchRankEntries
+		isLoading: isRankEntriesLoading
+		// refetch: refetchRankEntries
 	} = api.rank.getRankEntries.useQuery(undefined, {
 		refetchOnMount: false,
 		refetchOnWindowFocus: false

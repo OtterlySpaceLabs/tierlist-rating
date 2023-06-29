@@ -19,8 +19,11 @@ import { Label } from "../../../components/ui/label"
 import { Input } from "../../../components/ui/input"
 import { Alert, AlertDescription, AlertTitle } from "../../../components/ui/alert"
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline"
+// import { useRouter } from "next/router"
+// import { type SmashWithSubmissionAndAuthor } from "../../../server/api/routers/smash/smash.interface"
 
 export default function SubmissionListPage() {
+	// const router = useRouter()
 	const { data: smashes } = api.smash.getSubmissionsVoted.useQuery(undefined, {
 		refetchOnMount: false,
 		refetchOnWindowFocus: false
@@ -96,6 +99,33 @@ export default function SubmissionListPage() {
 		})
 	}, [preFilteredSmashes, search, fuse])
 
+	// TODO: Implement delete feature
+
+	// const [showDeleteDialog, setShowDeleteDialog] = useState(false)
+	// const [smashToDelete, setSmashToDelete] = useState<SmashWithSubmissionAndAuthor | null>(null)
+
+	// const showDeleteDialogHandler = useCallback(
+	// 	(smash: SmashWithSubmissionAndAuthor) => {
+	// 		if (showDeleteDialog) {
+	// 			return
+	// 		}
+	// 		setSmashToDelete(smash)
+	// 		setShowDeleteDialog(true)
+	// 	},
+	// 	[showDeleteDialog]
+	// )
+
+	// const hideDeleteDialogHandler = useCallback(
+	// 	(isDeleted?: boolean) => {
+	// 		if (isDeleted) {
+	// 			void router.replace(router.asPath)
+	// 		}
+	// 		setShowDeleteDialog(false)
+	// 		setSmashToDelete(null)
+	// 	},
+	// 	[router]
+	// )
+
 	return (
 		<div className="flex h-screen flex-col">
 			<CustomHead title="Submission list" />
@@ -148,13 +178,15 @@ export default function SubmissionListPage() {
 						</div>
 					</div>
 					{filteredSmashes && filteredSmashes.length > 0 ? (
-						<ul>
-							{filteredSmashes.map((smash, index) => (
-								<li key={smash.id} className={cn("py-4", lineBorderStyle(index))}>
-									<ListSmashItem smash={smash} />
-								</li>
-							))}
-						</ul>
+						<>
+							<ul>
+								{filteredSmashes.map((smash, index) => (
+									<li key={smash.id} className={cn("py-4", lineBorderStyle(index))}>
+										<ListSmashItem smash={smash} />
+									</li>
+								))}
+							</ul>
+						</>
 					) : (
 						<h2 className="text-center text-xl">No smash votes yet</h2>
 					)}

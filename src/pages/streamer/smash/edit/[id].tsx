@@ -6,23 +6,23 @@ import { type GetServerSideProps } from "next"
 import { prisma } from "../../../../server/db"
 import { getServerSession } from "next-auth"
 import { authOptions } from "../../../../server/auth"
-import { type Submission } from "@prisma/client"
-import SubmissionEditForm from "../../../../components/submission/submissionEditForm"
+import SmashEditForm from "../../../../components/smash/smashEditForm"
+import { type SmashWithSubmissionAndAuthor } from "../../../../server/api/routers/smash/smash.interface"
 
-interface SubmitEditPageProps {
+interface SmashEditPageProps {
 	id: string
-	submission: Submission
+	smash: SmashWithSubmissionAndAuthor
 }
 
-export default function SubmitEditPage({ submission }: SubmitEditPageProps) {
+export default function SmashEditPage({ smash }: SmashEditPageProps) {
 	return (
 		<div className="flex h-screen flex-col">
-			<CustomHead title="Submit" />
+			<CustomHead title="Smash" />
 			<Header />
 			<TabsNavigation />
-			<main className="mb-auto flex flex-col items-center p-8 pt-0">
-				<section className="mt-8 w-full max-w-2xl">
-					<SubmissionEditForm submission={submission} />
+			<main className="my-auto flex min-h-max flex-col items-center p-8">
+				<section className="mt-8 w-full max-w-4xl">
+					<SmashEditForm smash={smash} />
 				</section>
 			</main>
 			<Footer />
@@ -49,19 +49,32 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 		}
 	}
 
-	const submission = await prisma.submission.findUnique({
+	const smash = await prisma.smashEntry.findUnique({
 		where: {
 			id
+		},
+		include: {
+			submission: {
+				include: {
+					author: {
+						select: {
+							id: true,
+							name: true,
+							image: true
+						}
+					}
+				}
+			}
 		}
 	})
 
-	if (!submission) {
+	if (!smash) {
 		return {
 			notFound: true
 		}
 	}
 
-	if (submission.authorId !== session.user.id && !session.user.isModerator) {
+	if (smash.authorId !== session.user.id && !session.user.isModerator) {
 		return {
 			notFound: true
 		}
@@ -70,7 +83,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 	return {
 		props: {
 			id,
-			submission
+			smash
 		}
 	}
 }
