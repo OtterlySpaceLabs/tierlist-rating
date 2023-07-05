@@ -70,8 +70,7 @@ export default function SubmissionForm() {
 							<li>
 								Character must be fictional and appear in a video game (anime characters are tolerated)
 							</li>
-							<li>He needs to be male or identify as a male/non-binary</li>
-							<li>He needs to be 18+</li>
+							<li>They need to be 18+</li>
 							<li>Try to use official artwork or in-game captures</li>
 							<li>
 								Avoid fanarts, especially if its artist is unknown or if they don&apos;t allow repost
