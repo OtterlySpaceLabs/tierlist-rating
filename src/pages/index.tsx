@@ -31,7 +31,7 @@ const Home: NextPage = () => {
 					/>
 					<h1 className="text-center text-4xl font-bold">Get your game character crush in!</h1>
 					<p className="mt-4 text-center text-xl">
-						Submit your favorites male game characters and have your streamer rank them!
+						Submit your favorites game characters and have your streamer rank them!
 					</p>
 					<button
 						className="mt-8 inline-flex items-center rounded-md bg-purple-700 px-4 py-2 text-lg font-semibold text-white hover:bg-purple-600"
